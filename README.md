@@ -85,7 +85,7 @@ The [5-phase roadmap](roadmap/ROADMAP_2030.md) outlines base, aggressive, and st
 ## Canonical Architecture
 
 | Tier | Unit | Physical Qubits | Logical Qubits (100:1 stretch) |
-| --- | --- | ---: | ---: |
+| --- | --- | --- | --- |
 | Chiplet | 1 | 2,000 | 20 |
 | Module | 5 chiplets | 10,000 | 100 |
 | System | 10 modules | 100,000 | 1,000 |
