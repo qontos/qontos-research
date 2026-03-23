@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use or reference QONTOS in your work, please cite it using this metadata."
+type: software
+title: "QONTOS: Quantum Orchestration and Topology Operating System"
+abstract: >-
+  QONTOS is a full-stack quantum computing platform combining modular
+  tantalum-silicon qubit hardware, photonic interconnects, AI-driven error
+  decoding, and a cloud-native software stack. This repository contains the
+  public research papers, whitepapers, and roadmap documents.
+authors:
+  - family-names: Tamilselvan
+    given-names: Ramesh
+    orcid: ""
+license: Apache-2.0
+repository-code: "https://github.com/qontos/qontos-research"
+url: "https://qontos.com"
+version: "0.1.0"
+date-released: "2025-01-01"
+keywords:
+  - quantum computing
+  - fault tolerance
+  - error correction
+  - tantalum qubits
+  - photonic interconnects
+  - quantum software
