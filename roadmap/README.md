@@ -4,6 +4,8 @@
 
 The QONTOS roadmap defines a five-phase program from 2025 to 2030, progressing from software platform launch and first qubit prototypes to a million-qubit fault-tolerant quantum computer. Each phase includes Base, Aggressive, and Stretch scenarios to account for technical and programmatic uncertainty.
 
+The latest roadmap paper is available as [`10_Roadmap_2030.md`](10_Roadmap_2030.md).
+
 ---
 
 ## Phase 1 -- Foundation (2025-2026)

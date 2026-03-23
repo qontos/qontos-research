@@ -1,21 +1,28 @@
 # QONTOS Research Papers
 
-## QONTOS v2 Technical Series
+## QONTOS Research Collection
 
-The QONTOS v2 Technical Series is a collection of 10 papers covering every layer of the quantum computing stack, from qubit fabrication to the 2030 roadmap.
+The QONTOS research collection is a 10-paper series covering every major layer of the quantum computing stack, from modular architecture and qubit technology to fault tolerance, software, benchmarking, and the 2030 roadmap.
 
 | # | Title | Status |
 |---|-------|--------|
-| 1 | **Scaled Architecture for Modular Fault-Tolerant Quantum Computing** | In preparation |
-| 2 | **Tantalum-Silicon Qubits: Fabrication, Coherence, and Scalability** | In preparation |
-| 3 | **Error Correction at 100:1 Physical-to-Logical Qubit Ratios** | In preparation |
-| 4 | **Photonic Interconnects for Multi-Module Quantum Processors** | In preparation |
-| 5 | **AI-Driven Decoding for Real-Time Quantum Error Correction** | In preparation |
-| 6 | **The QONTOS Software Stack: From Circuits to Cloud** | In preparation |
-| 7 | **Cryogenic Infrastructure for Million-Qubit Systems** | In preparation |
-| 8 | **Quantum Algorithms for Near-Term and Fault-Tolerant Processors** | In preparation |
-| 9 | **Benchmarking Quantum Processors: Metrics, Methods, and Results** | In preparation |
-| 10 | **Roadmap to 2030: From 1,000 to 1,000,000 Physical Qubits** | In preparation |
+| 1 | **Scaled Architecture for Modular Fault-Tolerant Quantum Computing** | Published in repo |
+| 2 | **Tantalum-Silicon Qubits: Fabrication, Coherence, and Scalability** | Published in repo |
+| 3 | **Error Correction at 100:1 Physical-to-Logical Qubit Ratios** | Published in repo |
+| 4 | **Photonic Interconnects for Multi-Module Quantum Processors** | Published in repo |
+| 5 | **AI-Driven Decoding for Real-Time Quantum Error Correction** | Published in repo |
+| 6 | **The QONTOS Software Stack: From Circuits to Cloud** | Published in repo |
+| 7 | **Cryogenic Infrastructure for Million-Qubit Systems** | Published in repo |
+| 8 | **Quantum Algorithms for Near-Term and Fault-Tolerant Processors** | Published in repo |
+| 9 | **Benchmarking Quantum Processors: Metrics, Methods, and Results** | Published in repo |
+| 10 | **Roadmap to 2030: From 1,000 to 1,000,000 Physical Qubits** | Published in repo |
+
+## Available Files
+
+- Markdown sources for the executive summary and Papers 1-9 are included directly in this directory.
+- The roadmap paper is available in [`../roadmap/10_Roadmap_2030.md`](../roadmap/10_Roadmap_2030.md).
+- Rendered PDFs are available in [`pdf/`](pdf/).
+- The full collection is bundled as [`pdf/QONTOS_Research_Papers_v2_1_Collection.pdf`](pdf/QONTOS_Research_Papers_v2_1_Collection.pdf).
 
 ## Paper Summaries
 
@@ -48,6 +55,16 @@ Defines the QONTOS benchmarking methodology including metrics, test circuits, co
 
 ### Paper 10 -- Roadmap 2030
 Lays out the complete roadmap from 1,000 physical qubits to 1,000,000 physical qubits and 10,000 logical qubits by 2030, with milestones, risk analysis, and scenario planning.
+
+## Reading Order
+
+For the clearest program view, start with:
+
+1. [`00_Executive_Summary.md`](00_Executive_Summary.md)
+2. [`01_QONTOS_Scaled_Architecture.md`](01_QONTOS_Scaled_Architecture.md)
+3. [`06_Software_Stack.md`](06_Software_Stack.md)
+4. [`09_Benchmarking.md`](09_Benchmarking.md)
+5. [`10_Roadmap_2030.md`](../roadmap/10_Roadmap_2030.md)
 
 ## Contributing
 

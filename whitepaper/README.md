@@ -15,7 +15,12 @@ The QONTOS whitepaper presents the complete vision for a modular, fault-tolerant
 
 ## Access
 
-The whitepaper PDF will be published alongside the first stable release. A preprint will be available on arXiv.
+The latest whitepaper materials in this directory are:
+
+- [`Qontos_Whitepaper_updated.pdf`](Qontos_Whitepaper_updated.pdf)
+- [`QONTOS_Technical_Whitepaper.md`](QONTOS_Technical_Whitepaper.md)
+
+Together, they capture the current public QONTOS story: open software and research today, native modular quantum hardware in development, and a gated scaling roadmap through 2030.
 
 ## Citation
 
