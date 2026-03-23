@@ -1,85 +1,79 @@
 # QONTOS Research
 
-QONTOS Research contains the public whitepapers, roadmap documents, figures, and technical papers that define the long-range architecture and research direction of QONTOS.
-
-This repository presents the public research and program view of QONTOS as a full-stack modular quantum computing company: software available today, native modular hardware in development, and a stretch roadmap toward 1,000,000 physical qubits and 10,000 logical qubits by 2030.
-
----
+Public whitepapers, roadmap, technical papers, and figures from the QONTOS quantum computing program.
 
 ## Overview
 
-This repository is organized into the following areas:
+QONTOS is a full-stack modular quantum computing company. This repository contains the public research artifacts that define the long-range architecture, hardware assumptions, and program milestones.
 
-| Directory | Description |
-|-----------|-------------|
-| [`whitepaper/`](whitepaper/) | The latest QONTOS whitepaper in both Markdown and PDF form |
-| [`papers/`](papers/) | The complete QONTOS research paper collection and paper PDFs |
-| [`roadmap/`](roadmap/) | Five-phase roadmap from Foundation (2025) to Summit (2030) |
-| [`figures/`](figures/) | Architecture diagrams, charts, and publication-ready figure assets |
-| [`benchmarks/`](benchmarks/) | Benchmark methodology links and public evidence references |
+- **Open today**: Software platform, simulators, benchmarks, examples
+- **In development**: Native modular superconducting quantum hardware
+- **Stretch roadmap**: 1,000,000 physical qubits and 10,000 logical qubits by 2030
 
-## Whitepaper
+## Documents
 
-The QONTOS whitepaper presents the end-to-end vision for a modular, fault-tolerant quantum computing platform built on tantalum-silicon qubits, photonic interconnects, and AI-driven error decoding.
+### Technical Whitepaper
 
-Available now in [`whitepaper/`](whitepaper/):
+The [QONTOS Technical Whitepaper](whitepaper/QONTOS_Technical_Whitepaper.md) documents the implemented orchestration platform and the modular research program.
 
-- `Qontos_Whitepaper_updated.pdf`
-- `QONTOS_Technical_Whitepaper.md`
+- [Markdown](whitepaper/QONTOS_Technical_Whitepaper.md)
+- [IEEE LaTeX](whitepaper/QONTOS_Technical_Whitepaper_IEEE.tex)
 
-## Research Papers
+### Research Paper Series (v2)
 
-The QONTOS research series covers every major layer of the stack, from architecture and qubit technology through FTQC, photonic links, software, benchmarking, and the 2030 roadmap.
+| # | Paper | Topic | Status |
+|---|-------|-------|--------|
+| 01 | [Scaled Architecture](papers/01_QONTOS_Scaled_Architecture_v2.md) | Chiplet-module-system-datacenter hierarchy | Research |
+| 02 | [Tantalum-Silicon Qubits](papers/02_Tantalum_Silicon_Qubits_v2.md) | Qubit platform and device physics | Research |
+| 03 | [Error Correction at 100:1](papers/03_Error_Correction_100to1_v2.md) | QEC overhead reduction path | Research |
+| 04 | [Photonic Interconnects](papers/04_Photonic_Interconnects_v2.md) | Inter-module communication | Research |
+| 05 | [AI Decoding](papers/05_AI_Decoding_v2.md) | Neural decoder architecture | Research |
+| 06 | [Software Stack](papers/06_Software_Stack_v2.md) | Orchestration and runtime | Implemented + Research |
+| 07 | [Cryogenic Infrastructure](papers/07_Cryogenic_Infrastructure_v2.md) | Thermal and facility engineering | Research |
+| 08 | [Quantum Algorithms](papers/08_Quantum_Algorithms_v2.md) | Application benchmarks | Research |
+| 09 | [Benchmarking](papers/09_Benchmarking_v2.md) | Measurement methodology | Implemented + Research |
+| 10 | [Roadmap 2030](papers/10_Roadmap_2030_v2.md) | Gated development plan | Research |
 
-| # | Title |
-|---|-------|
-| 1 | Scaled Architecture for Modular Fault-Tolerant Quantum Computing |
-| 2 | Tantalum-Silicon Qubits: Fabrication, Coherence, and Scalability |
-| 3 | Error Correction at 100:1 Physical-to-Logical Qubit Ratios |
-| 4 | Photonic Interconnects for Multi-Module Quantum Processors |
-| 5 | AI-Driven Decoding for Real-Time Quantum Error Correction |
-| 6 | The QONTOS Software Stack: From Circuits to Cloud |
-| 7 | Cryogenic Infrastructure for Million-Qubit Systems |
-| 8 | Quantum Algorithms for Near-Term and Fault-Tolerant Processors |
-| 9 | Benchmarking Quantum Processors: Metrics, Methods, and Results |
-| 10 | Roadmap to 2030: From 1,000 to 1,000,000 Physical Qubits |
+### Program Roadmap
 
-The paper set is available in [`papers/`](papers/) as Markdown source plus rendered PDFs in [`papers/pdf/`](papers/pdf/), including the combined collection PDF.
+The [5-Phase Development Roadmap](roadmap/ROADMAP_2030.md) outlines the gated program with base, aggressive, and stretch scenarios.
 
-## Roadmap
+| Phase | Timeline | Base | Aggressive | Stretch |
+|-------|----------|------|------------|---------|
+| Foundation | 2025–2026 | Platform + benchmarks | First HW validation | Stretch device evidence |
+| Sputnik | 2026–2027 | Small modular HW | 10k-qubit module | Stretch module target |
+| Pioneer | 2027–2028 | Distributed runtime | Multi-module demos | 100k qubit path |
+| Horizon | 2028–2029 | Modular platform | 100k phys. + 1k logical | 500k phys. + 5k logical |
+| Summit | 2029–2030 | Commercial platform | Large FT machine | 1M phys. + 10k logical |
 
-The QONTOS roadmap is organized into five phases:
+## Canonical Architecture
 
-| Phase | Period | Goal |
-|-------|--------|------|
-| **Foundation** | 2025-2026 | Software platform launch, first tantalum-silicon qubit prototypes |
-| **Sputnik** | 2026-2027 | 1,000-qubit module, real-time error correction demonstrations |
-| **Pioneer** | 2027-2028 | 10,000 physical qubits, photonic interconnect integration |
-| **Horizon** | 2028-2029 | 100,000 physical qubits, 1,000 logical qubits, quantum advantage benchmarks |
-| **Summit** | 2029-2030 | 1,000,000 physical qubits, 10,000 logical qubits, full fault tolerance |
-
-See [`roadmap/`](roadmap/) for the full roadmap with Base, Aggressive, and Stretch scenarios.
-
-## Figures
-
-Architecture diagrams, system charts, and publication-ready figures are maintained in [`figures/`](figures/). The current figure set includes architecture, materials, error correction, interconnect, software, cryogenics, algorithms, benchmarking, and roadmap visuals.
+| Tier | Unit | Physical Qubits | Logical Qubits (100:1 stretch) |
+|------|------|----------------:|-------------------------------:|
+| Chiplet | 1 | 2,000 | 20 |
+| Module | 5 chiplets | 10,000 | 100 |
+| System | 10 modules | 100,000 | 1,000 |
+| Data Center | 10 systems | 1,000,000 | 10,000 |
 
 ## Citation
 
-If you reference QONTOS in your work, please cite:
-
 ```bibtex
-@software{qontos2025,
-  author       = {Tamilselvan, Ramesh},
-  title        = {QONTOS: Quantum Orchestration and Topology Operating System},
-  year         = {2025},
-  url          = {https://github.com/qontos/qontos-research},
-  license      = {Apache-2.0}
+@techreport{qontos2026,
+  title = {QONTOS: Quantum Orchestrated Network for Transformative Optimization Systems},
+  author = {QONTOS Quantum Technologies},
+  institution = {Zhyra Quantum Research Institute},
+  year = {2026},
+  url = {https://github.com/qontos/qontos-research}
 }
 ```
 
+## Related Repositories
+
+- [qontos](https://github.com/qontos/qontos) — Flagship SDK
+- [qontos-sim](https://github.com/qontos/qontos-sim) — Simulators and digital twin
+- [qontos-examples](https://github.com/qontos/qontos-examples) — Tutorials and examples
+- [qontos-benchmarks](https://github.com/qontos/qontos-benchmarks) — Benchmark evidence
+
 ## License
 
-This repository is licensed under the [Apache License 2.0](LICENSE).
-
-Copyright 2025-2026 QONTOS Quantum Technologies. All rights reserved.
+Apache License 2.0. See [LICENSE](LICENSE).
