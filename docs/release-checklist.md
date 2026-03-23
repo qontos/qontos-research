@@ -31,3 +31,39 @@ After any release, verify all three repos tell the same install story:
 | `qontos-sim` | `README.md` | Current sim tag |
 | `qontos-examples` | `requirements.txt` | Both pinned tags |
 | `qontos-examples` | `README.md` | Both pinned tags |
+| `qontos-benchmarks` | `pyproject.toml` | Pinned SDK tag |
+| `qontos-benchmarks` | `README.md` | Current bench tag |
+
+## Shared CI Policy Versioning
+
+The doc-consistency checker (`check-repo-docs.sh`) is **vendored** into each public repo under `.github/scripts/`. This means each repo's CI is hermetic — it does not depend on another repo's `main` branch at runtime.
+
+### How shared scripts are managed
+
+| Component | Location | Versioning |
+|-----------|----------|------------|
+| `check-repo-docs.sh` | Vendored in each repo's `.github/scripts/` | Copied from `.github` org repo on update |
+| `check-doc-consistency.sh` | `.github` org repo only (cross-repo) | Runs in `.github` CI only |
+| `doc-check.yml` | Each repo's `.github/workflows/` | Uses local vendored script |
+| `doc-consistency.yml` | `.github` org repo only | Clones all 5 repos at runtime |
+
+### Updating the shared checker
+
+When the doc-consistency rules change:
+
+1. Update `check-repo-docs.sh` in the `.github` org repo
+2. Copy the updated script to each public repo:
+   ```bash
+   for repo in qontos qontos-sim qontos-examples qontos-benchmarks qontos-research; do
+     cp .github/scripts/check-repo-docs.sh "${repo}/.github/scripts/check-repo-docs.sh"
+   done
+   ```
+3. Commit and push each repo
+4. The org-level `doc-consistency.yml` will also pick up the new rules automatically
+
+### Why vendored, not fetched
+
+- **Hermetic**: A repo's CI result depends only on that repo's committed content
+- **Auditable**: `git log .github/scripts/check-repo-docs.sh` shows when rules changed
+- **No surprise breaks**: Updating `.github` doesn't silently break other repos' CI
+- **Trade-off**: Requires manual propagation (5 copies), but the update is rare and simple
