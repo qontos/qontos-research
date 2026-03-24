@@ -3,6 +3,7 @@
 Welcome to the QONTOS research documentation. This page serves as the landing page for all public research materials produced by the QONTOS quantum computing program.
 
 Use the [Public Registry](https://github.com/qontos/.github/blob/main/docs/public-registry.md) for the shared map across the public SDK, simulator, examples, benchmark, and research repos.
+Use the [Release & Install Policy](https://github.com/qontos/.github/blob/main/docs/release-install-policy.md) for the canonical public package and release guidance.
 
 ## Research Materials
 

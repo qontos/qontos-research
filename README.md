@@ -34,6 +34,7 @@
 QONTOS Research is the public technical publication layer for the broader QONTOS platform. It collects the whitepaper, paper series, roadmap, and figures that explain how the software stack, modular hardware program, and long-range scaling assumptions fit together.
 
 Start with [docs/index.md](docs/index.md) for the research docs hub and links into the wider public QONTOS ecosystem.
+For the canonical public install and release posture, use [the shared policy](https://github.com/qontos/.github/blob/main/docs/release-install-policy.md).
 
 - **Open today**: SDK, simulators, examples, benchmarks, and public technical documentation
 - **In development**: native modular superconducting hardware with photonic interconnects

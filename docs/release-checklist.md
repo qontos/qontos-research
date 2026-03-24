@@ -1,5 +1,8 @@
 # QONTOS Release Checklist
 
+The public-facing install and release policy now lives in [.github/docs/release-install-policy.md](https://github.com/qontos/.github/blob/main/docs/release-install-policy.md).
+Use this file as the maintainer-oriented release sequence and propagation checklist.
+
 When cutting a new release across the public repos, update all install references in this order.
 
 ## Pre-release → Tag Cut
@@ -25,7 +28,7 @@ When packages are published to PyPI:
 After any release, verify all three repos tell the same install story:
 
 | Repo | File | Should Reference |
-|------|------|-----------------|
+| :--- | :--- | :--- |
 | `qontos` | `README.md` | Current SDK tag |
 | `qontos-sim` | `pyproject.toml` | Pinned SDK tag |
 | `qontos-sim` | `README.md` | Current sim tag |
@@ -41,7 +44,7 @@ The doc-consistency checker (`check-repo-docs.sh`) is **vendored** into each pub
 ### How shared scripts are managed
 
 | Component | Location | Versioning |
-|-----------|----------|------------|
+| :--- | :--- | :--- |
 | `check-repo-docs.sh` | Vendored in each repo's `.github/scripts/` | Copied from `.github` org repo on update |
 | `check-doc-consistency.sh` | `.github` org repo only (cross-repo) | Runs in `.github` CI only |
 | `doc-check.yml` | Each repo's `.github/workflows/` | Uses local vendored script |
