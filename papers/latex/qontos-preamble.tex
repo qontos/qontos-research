@@ -1,0 +1,51 @@
+% QONTOS Research Paper Series — Shared LaTeX Preamble
+% Use with: \input{qontos-preamble}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{enumitem}
+
+% Listing style
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+}
+
+% Custom column type
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% QONTOS colors
+\definecolor{qontosnavy}{HTML}{0A1628}
+\definecolor{qontosblue}{HTML}{1E88E5}
+\definecolor{qontosteal}{HTML}{00BCD4}
+
+% Hyperref setup
+\hypersetup{
+  colorlinks=true,
+  linkcolor=qontosblue,
+  citecolor=qontosblue,
+  urlcolor=qontosteal,
+}
+
+% Author block
+\newcommand{\qontosauthor}{%
+\IEEEauthorblockN{QONTOS Research Wing}
+\IEEEauthorblockA{
+Zhyra Quantum Research Institute (ZQRI)\\
+Advanced Quantum Systems Division\\
+Abu Dhabi, UAE\\
+\texttt{research@zhyra.xyz}}
+}

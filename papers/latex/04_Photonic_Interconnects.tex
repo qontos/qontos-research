@@ -1,0 +1,552 @@
+\documentclass[conference]{IEEEtran}
+\input{qontos-preamble}
+
+\begin{document}
+
+\title{Photonic Interconnects for Modular Quantum Systems: End-to-End Link Budgets, Transduction Efficiency, and Systems-Integration Analysis}
+
+\author{\qontosauthor}
+
+\maketitle
+
+\begin{abstract}
+Scaling superconducting quantum processors beyond single-dilution-refrigerator limits requires high-fidelity, low-latency quantum communication between physically separated modules. Within the QONTOS hybrid superconducting-photonic modular architecture, photonic interconnects---converting microwave quantum states to optical photons for transmission and back---represent the leading candidate for this role. However, the path from laboratory transduction demonstrations to deployed modular links carries compounding losses at every stage: transduction efficiency, fiber coupling, switching, propagation, detection, and heralding. This paper constructs an end-to-end Bell-pair generation budget for the QONTOS modular architecture, identifies the dominant loss mechanisms, maps performance against four scenario bands (research-limited, base, aggressive, stretch), and defines validation gates that must be cleared before photonic interconnects can be promoted from research thesis to architectural commitment. We find that the stretch architecture (100+ modules, $10^6$ qubits) requires end-to-end transduction efficiency above 20\% combined with single-photon detector efficiency above 90\% and fiber-coupled heralding rates exceeding 50~kHz---targets that exceed current experimental demonstrations by one to two orders of magnitude but that fall within projected improvement trajectories identified in the literature~\cite{Awschalom2021, Lauk2020}. The paper closes with failure-mode analysis, fallback architectures, and a phased validation roadmap.
+
+\textbf{[Claim-label: paper-scope]} This is a systems-integration feasibility analysis. No experimental results are reported. All performance numbers are derived from published literature or from engineering projections explicitly marked as such.
+\end{abstract}
+
+\section{Introduction and Motivation}
+
+\subsection{The Modular Scaling Imperative}
+
+Monolithic superconducting quantum processors face fundamental scaling barriers: wiring density grows linearly with qubit count, thermal load from control lines constrains dilution-refrigerator capacity, and yield on large chips degrades with area. Monroe et al.~\cite{Monroe2014} articulated the modular architecture concept---distributing qubits across smaller, high-yield modules connected by quantum communication channels---as a path to large-scale fault-tolerant quantum computing. The QONTOS architecture adopts this modular thesis as its primary scaling strategy beyond approximately 1,000 physical qubits per module.
+
+\textbf{[Claim: modular-motivation $|$ Status: derived-from-literature]} Modular architectures address known scaling limits of monolithic chips. The specific threshold at which modularity becomes advantageous depends on qubit technology, yield curves, and interconnect quality.
+
+\subsection{Why Photonic Interconnects}
+
+Three broad approaches exist for inter-module quantum communication in superconducting systems:
+
+\begin{enumerate}
+\item \textbf{Direct microwave links} between cryostats, demonstrated by Magnard et al.~\cite{Magnard2020} and Kurpiers et al.~\cite{Kurpiers2018}, achieving deterministic state transfer over short (meter-scale) coaxial connections at millikelvin temperatures.
+\item \textbf{Microwave-to-optical transduction} followed by optical fiber transmission and optical-to-microwave back-conversion, enabling room-temperature-compatible long-distance links.
+\item \textbf{Hybrid electro-optic readout} paths, such as those demonstrated by Lecocq et al.~\cite{Lecocq2021} and Delaney et al.~\cite{Delaney2022}, where optical photons carry classical information about qubit states with low backaction.
+\end{enumerate}
+
+Direct microwave links (approach~1) are limited to intra-cryostat or adjacent-cryostat distances and impose significant thermal load at scale. Hybrid readout paths (approach~3) address classical communication but do not directly generate entanglement. Photonic interconnects (approach~2) uniquely offer:
+
+\begin{itemize}
+\item \textbf{Thermal decoupling}: optical fibers carry negligible heat load between cryogenic stages.
+\item \textbf{Distance flexibility}: standard telecom fiber supports kilometer-scale links with sub-dB/km loss at 1550~nm.
+\item \textbf{Topological flexibility}: optical switches enable reconfigurable module-to-module connectivity.
+\item \textbf{Compatibility with quantum repeater architectures} for eventual multi-node scaling.
+\end{itemize}
+
+\textbf{[Claim: photonic-rationale $|$ Status: derived-from-literature]} Photonic interconnects are the only demonstrated approach that simultaneously provides thermal isolation, distance flexibility, and entanglement distribution capability for superconducting modular systems.
+
+\subsection{Literature Baseline vs.\ QONTOS Targets}
+
+The following table anchors each key metric in published experimental results and then states the QONTOS target regime. This separation is critical: the literature baseline represents what has been demonstrated; the QONTOS target represents what must be engineered.
+
+\begin{table}[H]
+\centering
+\caption{Literature baseline versus QONTOS targets for photonic interconnect metrics.}
+\label{tab:lit-baseline}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{2.0cm}L{1.5cm}L{1.0cm}L{1.2cm}L{1.2cm}}
+\toprule
+\textbf{Metric} & \textbf{Lit.\ baseline} & \textbf{Ref.} & \textbf{QONTOS base} & \textbf{QONTOS stretch} \\
+\midrule
+MW-to-optical transduction eff. & $10^{-5}$ to $10^{-2}$ & \cite{Mirhosseini2020, Delaney2022} & 1--10\% & $\geq$20\% \\
+Added noise (photons/conv.) & 0.5--10 & \cite{Lauk2020} & $<$0.1 & $<$0.01 \\
+Determ.\ MW state transfer fid. & 80--99.6\% (intra-cryo.) & \cite{Kurpiers2018} & N/A & N/A \\
+MW link between cryostats & 83.9\% (process fid.) & \cite{Magnard2020} & N/A & N/A \\
+Remote entanglement via MW photons & Bell-state fid.\ $\sim$70--80\% & \cite{Zhong2019} & $\geq$95\% & $\geq$99\% \\
+Optical readout via photonic link & SNR sufficient & \cite{Lecocq2021} & Classical readout & Classical readout \\
+Low-backaction EO transduction & Demonstrated & \cite{Delaney2022} & Hybrid baseline & Hybrid baseline \\
+Entanglement distrib.\ rate & Not yet demonstrated & \cite{Awschalom2021} & 1--20~kHz & $\geq$100~kHz \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{[Claim: literature-baseline $|$ Status: verified-from-references]} All baseline values are drawn from the cited publications. Where a range is given, it reflects variation across experimental conditions reported in those works.
+
+\textbf{[Claim: qontos-targets $|$ Status: engineering-projection]} QONTOS targets are not yet experimentally demonstrated at the system level. They represent performance requirements derived from architectural modeling described in Sections~2 and~3.
+
+\subsection{Paper Structure}
+
+Section~2 develops the end-to-end link budget. Section~3 maps the link budget onto QONTOS architectural parameters. Section~4 analyzes transduction technology options. Section~5 covers failure modes and fallback strategies. Section~6 discusses systems-integration considerations. Section~7 defines validation gates. Section~8 presents the scenario summary. Section~9 concludes.
+
+\section{End-to-End Link Budget Analysis}
+
+\subsection{Link Architecture Overview}
+
+The canonical QONTOS photonic link consists of the following stages, each contributing loss or noise:
+
+\begin{lstlisting}
+[Qubit A] --> MW cavity --> Transducer (MW->Opt)
+  --> Fiber coupler --> Optical fiber
+  --> Optical switch --> Fiber coupler
+  --> Transducer (Opt->MW) --> MW cavity
+  --> [Qubit B]
+             |
+       Heralding detector
+\end{lstlisting}
+
+For entanglement distribution, the protocol is heralded: a Bell-state measurement on emitted photons projects the remote qubits into an entangled state. The heralding step means that transduction loss does not directly reduce fidelity---it reduces the \emph{rate} at which successful entanglement events occur. However, added noise during transduction does degrade fidelity, and retry overhead from low success probability introduces latency.
+
+\subsection{Component-Level Loss Budget}
+
+The following table presents the component-level loss budget. Each row represents a distinct physical stage. Values are given for four scenario bands.
+
+\begin{table}[H]
+\centering
+\caption{Component-level loss budget across scenario bands.}
+\label{tab:component-loss}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{2.2cm}ccccl}
+\toprule
+\textbf{Component} & \textbf{Res.-lim.} & \textbf{Base} & \textbf{Aggr.} & \textbf{Stretch} & \textbf{Unit} \\
+\midrule
+MW-to-opt.\ transd.\ eff. & 0.01--0.1 & 1--5 & 10--15 & 20--30 & \% \\
+Transd.-to-fiber coupling & 30--50 & 60--75 & 80--90 & 90--95 & \% \\
+Fiber prop.\ (10~m, 1550~nm) & 99.98 & 99.98 & 99.98 & 99.98 & \% tx \\
+Fiber prop.\ (1~km, 1550~nm) & 95.5 & 95.5 & 95.5 & 95.5 & \% tx \\
+Opt.\ switch ins.\ loss (/sw) & 85--90 & 90--95 & 95--97 & 97--99 & \% tx \\
+Fiber-to-transd.\ coupling (rx) & 30--50 & 60--75 & 80--90 & 90--95 & \% \\
+Opt.-to-MW transd.\ eff. & 0.01--0.1 & 1--5 & 10--15 & 20--30 & \% \\
+SPD eff.\ (heralding) & 70--80 & 80--85 & 85--90 & 90--95 & \% \\
+Heralding/coinc.\ window eff. & 50--70 & 70--80 & 80--90 & 90--95 & \% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{[Claim: component-budget $|$ Status: engineering-estimate]} Individual component values for the base and research-limited bands are consistent with published results. Aggressive and stretch values represent projected performance informed by device-physics roadmaps described in Awschalom et al.~\cite{Awschalom2021} and Lauk et al.~\cite{Lauk2020}.
+
+\subsection{End-to-End Bell Pair Budget}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{../../figures/04_transduction.png}
+\caption{Photonic link budget for end-to-end Bell pair generation.}
+\label{fig:link-budget}
+\end{figure}
+
+The end-to-end probability of a successful heralded Bell pair generation attempt is the product of all component efficiencies along the link path. For a symmetric link (identical transducers on both sides), the dominant terms are:
+
+\begin{equation}
+P_{\text{success}} = \eta_{\text{td}}^2 \cdot \eta_{\text{couple}}^2 \cdot \eta_{\text{fiber}} \cdot \eta_{\text{switch}}^N \cdot \eta_{\text{det}} \cdot \eta_{\text{herald}}
+\end{equation}
+
+Where $\eta_{\text{td}}$ is the transduction efficiency (MW to optical, one direction), $\eta_{\text{couple}}$ is the transducer-to-fiber coupling efficiency (each end), $\eta_{\text{fiber}}$ is the fiber transmission (distance-dependent), $\eta_{\text{switch}}$ is the optical switch transmission per switch with $N$ switches in the path, $\eta_{\text{det}}$ is the single-photon detector efficiency, and $\eta_{\text{herald}}$ is the heralding and coincidence efficiency.
+
+\textbf{Worked example---Stretch scenario (10~m fiber, 2 switches):}
+\begin{align*}
+P_{\text{success}} &= (0.25)^2 \times (0.92)^2 \times 0.9998 \times (0.98)^2 \times 0.92 \times 0.92 \\
+&\approx 0.043 \quad (4.3\%)
+\end{align*}
+
+\textbf{Worked example---Base scenario (10~m fiber, 2 switches):}
+\begin{align*}
+P_{\text{success}} &= (0.03)^2 \times (0.67)^2 \times 0.9998 \times (0.92)^2 \times 0.82 \times 0.75 \\
+&\approx 2.1 \times 10^{-4} \quad (0.021\%)
+\end{align*}
+
+These success probabilities determine the retry overhead and effective Bell-pair rate.
+
+\begin{table}[H]
+\centering
+\caption{End-to-end Bell pair generation rates by scenario band.}
+\label{tab:bell-pair-rate}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{1.5cm}L{1.3cm}L{1.3cm}L{1.3cm}L{1.3cm}}
+\toprule
+\textbf{Scenario} & \textbf{$P_{\text{success}}$} & \textbf{Attempts for 99\%} & \textbf{Rate @1~MHz} & \textbf{Rate @10~MHz} \\
+\midrule
+Res.-limited & $\sim$$10^{-8}$--$10^{-6}$ & $>$$10^6$ & $<$1~Hz & $<$10~Hz \\
+Base & $\sim$$10^{-4}$ & $\sim$$4.6 \times 10^4$ & $\sim$22~Hz & $\sim$220~Hz \\
+Aggressive & $\sim$$10^{-2}$ & $\sim$460 & $\sim$2.2~kHz & $\sim$22~kHz \\
+Stretch & $\sim$$4 \times 10^{-2}$ & $\sim$115 & $\sim$8.7~kHz & $\sim$87~kHz \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{[Claim: bell-pair-budget $|$ Status: derived-calculation]} These rates assume independent identically distributed attempts with no correlated errors. Real systems will exhibit burst errors, detector dead time, and classical communication overhead for heralding confirmation, which will reduce effective rates by an estimated 20--50\%.
+
+\subsection{Failure Modes and Sensitivity Analysis}
+
+The Bell-pair budget reveals the following critical sensitivities:
+
+\textbf{Transduction efficiency dominates.} Because transduction enters quadratically (both ends of the link), a 2$\times$ improvement in transduction efficiency yields a 4$\times$ improvement in success probability. Moving from 5\% to 10\% transduction (base to aggressive boundary) increases $P_{\text{success}}$ by 4$\times$. This is the single highest-leverage improvement target.
+
+\textbf{Coupling loss is the second-order bottleneck.} Transducer-to-fiber coupling also enters quadratically. The gap between 60\% and 90\% coupling (base vs.\ stretch) contributes a 2.25$\times$ difference in success probability.
+
+\textbf{Detector efficiency is linear but bounded.} Moving from 80\% to 95\% detector efficiency contributes only a 1.19$\times$ improvement. Superconducting nanowire single-photon detectors (SNSPDs) already achieve $>$90\% efficiency at telecom wavelengths, so this is the most mature component in the chain.
+
+\textbf{Fiber loss is negligible for intra-datacenter links} ($<$100~m) but becomes significant for inter-building or inter-city links. At 10~km, fiber transmission at 1550~nm drops to approximately 79\%, which enters the budget as an additional 21\% loss---meaningful but not dominant relative to transduction.
+
+\textbf{Added noise during transduction} does not affect rate but degrades Bell-pair fidelity. If added noise is $n_{\text{add}}$ photons per conversion event, the fidelity penalty scales approximately as:
+\begin{equation}
+F_{\text{noise}} \sim \frac{1}{1 + n_{\text{add}}}
+\end{equation}
+
+For the stretch target ($n_{\text{add}} < 0.01$), the fidelity penalty is $<$1\%. For the research-limited regime ($n_{\text{add}} \sim 1$--10), the fidelity penalty is 50--90\%, rendering the entangled pairs unusable for fault-tolerant operations.
+
+\textbf{[Claim: failure-sensitivity $|$ Status: derived-calculation]} Sensitivity analysis is based on partial derivatives of the success-probability formula. Real device correlations may shift relative importance but do not change the qualitative ordering.
+
+\subsection{Validation Gate: Two-Module Link Demonstration}
+
+Before the photonic interconnect can be promoted from research thesis to architectural commitment, the following quantitative gate must be passed:
+
+\textbf{Gate P-1: Two-module Bell pair demonstration}
+\begin{itemize}
+\item Two superconducting qubit modules, each in a separate cryostat
+\item Connected by a photonic link (transduction + fiber + back-conversion)
+\item Heralded Bell pair generation with measured fidelity $\geq$ 70\% (Bell inequality violation threshold)
+\item Measured success probability consistent with component-level budget to within 3~dB
+\item Demonstrated at repetition rate $\geq$ 100~Hz
+\end{itemize}
+
+\textbf{[Claim: gate-P1 $|$ Status: QONTOS-defined-requirement]} This gate is necessary but not sufficient. Passing it demonstrates physical feasibility; it does not demonstrate the rates or fidelities needed for the stretch architecture.
+
+\section{Architecture Mapping}
+
+\subsection{QONTOS Modular Topology}
+
+The canonical stretch deployment assumed across the QONTOS paper set is:
+
+\begin{table}[H]
+\centering
+\caption{QONTOS stretch-scale modular topology parameters.}
+\label{tab:topology}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{3.0cm}cL{3.0cm}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Notes} \\
+\midrule
+Chiplets per module & 5 & Tantalum-on-silicon chiplets \\
+Qubits per chiplet & $\sim$2,000 & Physical qubits, pre-QEC \\
+Modules per system & 10 & Photonic mesh within one cryostat cluster \\
+Systems per data center & 10 & Photonic links between clusters \\
+Total modules & 100 & Stretch-scale target \\
+Total physical qubits & $\sim$1,000,000 & Before QEC encoding \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Interconnect Count and Topology}
+
+The number of photonic links depends on the inter-module connectivity topology. Three options are analyzed:
+
+\textbf{Option A: Full mesh within each system (10 modules).} Each system requires $\binom{10}{2} = 45$ bidirectional links internally. Between systems, a sparser connectivity suffices. With 4 inter-system links per system pair and $\binom{10}{2} = 45$ system pairs, the total is:
+\begin{itemize}
+\item Intra-system links: 10 systems $\times$ 45 links = 450
+\item Inter-system links: 45 pairs $\times$ 4 links = 180
+\item \textbf{Total: $\sim$630 managed photonic links}
+\end{itemize}
+
+\textbf{Option B: Degree-4 mesh within each system.} Each module connects to 4 neighbors. Intra-system links: 10 systems $\times$ 20 links = 200. With same inter-system count: \textbf{Total: $\sim$380 managed photonic links.}
+
+\textbf{Option C: Hierarchical fat-tree.} Two-level hierarchy with local full connectivity within groups of 5 modules, and spine links between groups: \textbf{Total: $\sim$250--350 managed photonic links, depending on spine oversubscription.}
+
+\textbf{[Claim: link-count $|$ Status: architecture-projection]} Stretch-scale modular systems require hundreds to low thousands of managed optical links, depending on topology and redundancy assumptions.
+
+\subsection{Bandwidth Requirements}
+
+Each photonic link must support the distributed surface code's inter-module stabilizer measurement cycle. The key timing constraint is:
+\begin{equation}
+T_{\text{bell}} + T_{\text{local\_ops}} + T_{\text{classical\_comm}} < T_{\text{QEC\_cycle}}
+\end{equation}
+
+For the QONTOS stretch architecture:
+\begin{itemize}
+\item $T_{\text{QEC\_cycle}}$ target: 1--10~$\mu$s
+\item $T_{\text{local\_ops}}$: $\sim$100--500~ns (gate times)
+\item $T_{\text{classical\_comm}}$: $\sim$100--500~ns (heralding confirmation)
+\item \textbf{$T_{\text{bell}}$ budget: $\sim$200~ns to 9~$\mu$s}
+\end{itemize}
+
+At the base Bell-pair rate of $\sim$220~Hz (from Section~2.3), a single link produces one pair every $\sim$4.5~ms---far too slow for the QEC cycle. This means:
+\begin{itemize}
+\item \textbf{Base scenario requires multiplexed links.} To achieve one Bell pair per 10~$\mu$s QEC cycle, approximately 450 parallel link attempts are needed at the base success probability.
+\item \textbf{Stretch scenario is marginally viable.} At $\sim$87~kHz (10~MHz attempt rate), one pair arrives every $\sim$11.5~$\mu$s. With 2$\times$ multiplexing, this fits within a 10~$\mu$s QEC cycle.
+\end{itemize}
+
+\textbf{[Claim: bandwidth-req $|$ Status: derived-calculation]} The QEC cycle time constraint is the most demanding driver of Bell-pair rate requirements.
+
+\subsection{Thermal Load Analysis}
+
+Each photonic link replaces a direct microwave coaxial connection that would carry thermal load from room temperature to the mixing chamber. The thermal comparison:
+
+\begin{table}[H]
+\centering
+\caption{Thermal load comparison per inter-module link.}
+\label{tab:thermal-load}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{2.5cm}cL{3.0cm}}
+\toprule
+\textbf{Connection type} & \textbf{Heat load to MXC} & \textbf{Notes} \\
+\midrule
+Coaxial MW (DC--10~GHz) & 1--10~$\mu$W & Depends on atten.\ staging \\
+Optical fiber (SM, 1550~nm) & $<$1~nW & Negligible absorption \\
+Photonic transducer (on-chip) & 10--100~nW & Pump laser dissipation \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+For 100 inter-module links, the thermal savings are: Coaxial: 100--1000~$\mu$W total heat load; Photonic: 1--10~$\mu$W total heat load. This represents a 10--100$\times$ reduction in thermal load at the mixing chamber, which is significant given that typical dilution refrigerators provide 10--20~$\mu$W of cooling power at 20~mK.
+
+\textbf{[Claim: thermal-advantage $|$ Status: engineering-estimate]} Thermal load estimates are order-of-magnitude. The qualitative advantage of photonic links is robust; the quantitative factor depends on implementation details.
+
+\section{Transduction Technology Assessment}
+
+\subsection{Electro-Optic Transduction}
+
+Electro-optic transducers use materials with strong Pockels coefficients (e.g., lithium niobate, aluminum nitride) to directly couple microwave and optical fields. Key characteristics:
+
+\begin{itemize}
+\item \textbf{Demonstrated efficiencies:} $10^{-5}$ to $10^{-2}$~\cite{Mirhosseini2020, Lauk2020}
+\item \textbf{Added noise:} Generally low (near quantum limit achievable)
+\item \textbf{Bandwidth:} Can exceed 1~MHz, enabling high attempt rates
+\item \textbf{Integration:} Compatible with on-chip fabrication; lithium niobate photonics is a maturing platform
+\item \textbf{QONTOS role:} Early baseline and R\&D path. Electro-optic devices are the most likely candidates to reach the base scenario (1--10\% efficiency) within the 2027--2028 timeframe.
+\end{itemize}
+
+\textbf{[Claim: EO-assessment $|$ Status: literature-informed-projection]}
+
+\subsection{Piezo-Optomechanical Transduction}
+
+Piezo-optomechanical transducers use a mechanical intermediary: microwave photons couple to a mechanical resonator (via piezoelectric interaction), which then couples to an optical cavity (via optomechanical interaction). Key characteristics:
+
+\begin{itemize}
+\item \textbf{Demonstrated efficiencies:} Up to $\sim$$10^{-1}$ in some configurations, but with significant added noise~\cite{Lauk2020}
+\item \textbf{Added noise:} Thermal mechanical occupation is the primary noise source; requires aggressive mechanical mode cooling
+\item \textbf{Bandwidth:} Typically limited to 10--100~kHz by mechanical linewidth
+\item \textbf{Integration:} More complex fabrication; requires co-integration of piezoelectric, mechanical, and optical components
+\item \textbf{QONTOS role:} Aggressive to stretch target path. Higher theoretical efficiency ceiling but greater engineering complexity.
+\end{itemize}
+
+\textbf{[Claim: POM-assessment $|$ Status: literature-informed-projection]}
+
+\subsection{Technology Selection for QONTOS Roadmap}
+
+The QONTOS strategy is dual-track:
+
+\begin{enumerate}
+\item \textbf{Near-term (2025--2028):} Develop electro-optic transduction path targeting base scenario (1--10\% efficiency). Validate two-module link (Gate P-1). Use hybrid electro-optic readout~\cite{Lecocq2021, Delaney2022} as a stepping stone to build optical integration competence.
+\item \textbf{Medium-term (2028--2031):} Down-select between electro-optic and piezo-optomechanical based on demonstrated efficiency trajectory. Target aggressive scenario (10--20\%).
+\item \textbf{Long-term (2031+):} Pursue stretch scenario ($\geq$20\%) with the winning technology. Integrate with full modular QEC stack.
+\end{enumerate}
+
+\textbf{[Claim: tech-roadmap $|$ Status: QONTOS-planning-target]} This roadmap is aspirational. Actual down-select timing depends on experimental progress.
+
+\section{Failure Modes, Risk Analysis, and Fallbacks}
+
+\subsection{Enumerated Failure Modes}
+
+\begin{table}[H]
+\centering
+\caption{Enumerated failure modes for photonic interconnects.}
+\label{tab:failure-modes}
+\footnotesize
+\begin{tabularx}{\columnwidth}{cL{2.0cm}cL{1.5cm}L{2.0cm}}
+\toprule
+\textbf{ID} & \textbf{Failure mode} & \textbf{Prob.} & \textbf{Impact} & \textbf{Mitigation} \\
+\midrule
+F-1 & Transd.\ eff.\ plateaus $<$1\% & Med & Blocks modular scaling & Direct MW link backup \\
+F-2 & Added noise $>$0.1 phot./conv. & Med-high & Bell fidelity too low for QEC & Post-select low-noise events \\
+F-3 & Mech.\ mode heating in POM devices & Med & Limits POM to lab demos & On-chip mech.\ cooling; narrow to EO \\
+F-4 & Opt.\ switch loss $>$1~dB/switch & Low & Constrains topology & Integr.\ photonic switch arrays \\
+F-5 & Heralding latency $>$ QEC budget & Med & Forces slower QEC cycles & Increase code distance at boundaries \\
+F-6 & Fab.\ yield too low for 100+ links & Med-high & Cost/schedule impact & Wafer-scale fab.; foundry partners \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{[Claim: failure-modes $|$ Status: risk-assessment]} Probability estimates are qualitative, based on the judgment of the QONTOS research team informed by literature trends.
+
+\subsection{Fallback Architectures}
+
+If the photonic interconnect path fails to reach the base scenario by 2028, QONTOS retains viable alternatives:
+
+\textbf{Fallback A: Direct microwave inter-module links (short-range modularity).} Following Magnard et al.~\cite{Magnard2020} and Kurpiers et al.~\cite{Kurpiers2018}, direct microwave links between adjacent cryostats can support 2--5 module systems. This limits total system size but preserves the modular fabrication advantage. The QONTOS architecture degrades to $\sim$50,000 physical qubits per system rather than 1,000,000.
+
+\textbf{Fallback B: Classical photonic readout with entanglement-assisted protocols.} Using the Lecocq et al.~\cite{Lecocq2021} approach, optical links carry classical measurement outcomes between modules. Entanglement is not directly distributed; instead, gate-teleportation protocols consume pre-distributed entanglement generated by slower offline channels. This reduces real-time bandwidth requirements at the cost of increased qubit memory lifetime requirements.
+
+\textbf{Fallback C: Reduced-scale deployment with software-layer compensation.} The QONTOS software stack and digital twin provide value even at reduced qubit counts. If interconnect R\&D underperforms, QONTOS can deploy 10,000--50,000 qubit systems with leading software and pursue interconnect scaling on a longer timeline.
+
+\textbf{[Claim: fallback-architectures $|$ Status: QONTOS-contingency-planning]} Fallback architectures represent degraded but viable operating points. They are not equivalent to the stretch architecture in computational capability.
+
+\section{Systems Integration Considerations}
+
+\subsection{Cryogenic Optical Packaging}
+
+Each transducer must be packaged inside the dilution refrigerator with: optical fiber feedthrough from the mixing chamber plate ($\sim$20~mK) to room temperature; pump laser delivery (for optomechanical or parametric transducers) with minimal thermal load; microwave coupling to the qubit cavity with minimal added loss; and alignment stability over thermal cycling.
+
+Current laboratory demonstrations use manual fiber alignment with V-groove mounts. Production deployment at 100+ link scale requires automated photonic packaging with $<$0.5~dB insertion loss per coupling point.
+
+\textbf{[Claim: cryo-packaging $|$ Status: engineering-challenge-identified]} Cryogenic photonic packaging at scale is an unsolved engineering problem. It is not a fundamental physics barrier but represents significant development effort.
+
+\subsection{Optical Switch Fabric}
+
+The reconfigurable interconnect topology requires an optical switch fabric capable of: routing any module output to any module input within a system (10$\times$10 non-blocking switch); switching time $<$~1~$\mu$s (compatible with QEC cycle); insertion loss $<$~1~dB per pass; and operation at or near cryogenic temperatures.
+
+Candidate technologies include MEMS-based switches (slow but low loss), electro-optic switches (fast but higher loss), and integrated photonic mesh networks. The choice interacts with the transduction technology: electro-optic transducers on lithium niobate can potentially integrate switches on the same platform.
+
+\textbf{[Claim: switch-fabric $|$ Status: engineering-challenge-identified]}
+
+\subsection{Detector Integration}
+
+Superconducting nanowire single-photon detectors (SNSPDs) are the baseline choice for heralding detection, offering: detection efficiency $>$~90\% at 1550~nm (commercially available); dark count rate $<$~100~Hz; timing jitter $<$~50~ps; and recovery time $<$~50~ns (compatible with MHz attempt rates).
+
+SNSPDs naturally operate at cryogenic temperatures (2--4~K), which is compatible with dilution refrigerator intermediate stages. Integrating detectors at the 4~K stage minimizes fiber runs while keeping thermal load off the mixing chamber.
+
+\textbf{[Claim: detector-integration $|$ Status: mature-technology]} SNSPD technology is the most mature component in the photonic interconnect chain. Commercial devices meet or exceed QONTOS requirements for all scenario bands.
+
+\subsection{Classical Control and Heralding Protocol}
+
+Each Bell-pair attempt generates a classical heralding signal that must be processed in real-time:
+\begin{enumerate}
+\item Photon detection event at SNSPD
+\item Discrimination and time-tagging (FPGA-based, $<$~100~ns latency)
+\item Coincidence detection with partner detector signal
+\item Success/failure signal communicated to both module controllers
+\item Module controllers update QEC syndrome processing accordingly
+\end{enumerate}
+
+The total classical round-trip latency for heralding adds directly to the QEC cycle time budget. For intra-system links ($<$~10~m fiber), optical propagation delay is $<$~50~ns. The dominant latency is in classical processing (steps 2--5), estimated at 200--500~ns with current FPGA technology.
+
+\textbf{[Claim: classical-control $|$ Status: engineering-estimate]} Classical heralding latency is not a fundamental limit but requires co-design of the control system with the QEC protocol.
+
+\section{Validation Roadmap}
+
+\subsection{Gate Definitions}
+
+\begin{table}[H]
+\centering
+\caption{Photonic interconnect validation gates.}
+\label{tab:validation-gates}
+\footnotesize
+\begin{tabularx}{\columnwidth}{cL{1.5cm}L{3.2cm}c}
+\toprule
+\textbf{Gate} & \textbf{Description} & \textbf{Success criteria} & \textbf{Target} \\
+\midrule
+P-0 & Component charact. & Transd.\ eff.\ $>$1\%, $<$0.5 added noise photons, on-chip & 2026 \\
+P-1 & Two-module Bell pair & Heralded Bell pair, sep.\ cryostats, fid.\ $>$70\%, rate $>$100~Hz & 2027 \\
+P-2 & Multi-link prototype & 4-module system w/ opt.\ switch, fid.\ $>$90\%, rate $>$1~kHz & 2029 \\
+P-3 & QEC-compatible link & Fid.\ $>$99\%, rate $>$10~kHz for distrib.\ surface code & 2030 \\
+P-4 & Stretch-scale deploy. & 10-module system w/ $>$50 managed links, stretch metrics & 2032 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{[Claim: validation-gates $|$ Status: QONTOS-defined-requirements]} Gate dates are planning targets. Actual timelines depend on experimental progress and are subject to revision at each gate review.
+
+\subsection{Decision Points}
+
+At each gate, the following decisions are made:
+\begin{itemize}
+\item \textbf{Pass:} Promote photonic interconnect from R\&D to architectural commitment at that scale.
+\item \textbf{Conditional pass:} Proceed with identified engineering improvements; do not yet commit architecture.
+\item \textbf{Fail with redirect:} Switch to fallback architecture (Section~5.2) for that scale; continue photonic R\&D for future scaling.
+\item \textbf{Fail with termination:} Abandon photonic path; fully commit to fallback architecture.
+\end{itemize}
+
+\subsection{Companion Validation Requirements}
+
+The photonic interconnect cannot be validated in isolation. Companion requirements include:
+\begin{enumerate}
+\item \textbf{Distributed QEC protocol validation} (Paper~03): The surface code boundary protocol must be tested with realistic inter-module error models, including probabilistic Bell-pair success and latency variation.
+\item \textbf{Modular compiler integration} (Paper~06): The software stack must support dynamic circuit compilation that accounts for inter-module communication latency and success probability.
+\item \textbf{Thermal budget validation} (Paper~07): The cryogenic infrastructure must demonstrate that transducer heat loads are within thermal budget at the target link count.
+\end{enumerate}
+
+\textbf{[Claim: companion-validation $|$ Status: cross-paper-dependency]} Photonic interconnect viability depends on co-validation with QEC, software, and cryogenic subsystems.
+
+\section{Scenario Summary and Recommendations}
+
+\subsection{Scenario Band Summary}
+
+\begin{table}[H]
+\centering
+\caption{Photonic interconnect scenario band summary.}
+\label{tab:scenario-summary}
+\footnotesize
+\begin{tabularx}{\columnwidth}{L{1.1cm}L{0.9cm}L{0.9cm}L{0.8cm}L{1.2cm}L{1.5cm}}
+\toprule
+\textbf{Scenario} & \textbf{Transd.} & \textbf{Bell rate} & \textbf{Fid.} & \textbf{Scale} & \textbf{Assessment} \\
+\midrule
+Res.-lim. & $<$1\% & $<$10~Hz & $<$70\% & PoC only & Insufficient \\
+Base & 1--10\% & 10--1k~Hz & 80--95\% & 2--5 modules & Min.\ viable; heavy mux \\
+Aggress. & 10--20\% & 1--20~kHz & 95--99\% & 10--20 mod. & Meaningful advantage \\
+Stretch & $\geq$20\% & 50--100+~kHz & $\geq$99\% & 100+ mod. & Full QONTOS scale \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Key Findings}
+
+\begin{enumerate}
+\item \textbf{Transduction efficiency is the gating metric.} It enters the Bell-pair budget quadratically and is currently 1--2 orders of magnitude below the stretch target. All other components (fibers, switches, detectors) are closer to their required performance levels.
+
+\item \textbf{The stretch architecture requires coordinated improvement across multiple components,} not just transduction. Coupling efficiency, added noise, and heralding protocol efficiency must all advance simultaneously.
+
+\item \textbf{The base scenario is achievable within 2--3 years} based on current experimental trajectories in electro-optic transduction, but it supports only limited modularity (2--5 modules).
+
+\item \textbf{There is no fundamental physics barrier} to reaching the stretch scenario. The challenges are in materials science (transducer efficiency), photonic integration (coupling loss), and systems engineering (packaging, switching, control).
+
+\item \textbf{Fallback architectures exist} but provide significantly reduced capability. The photonic interconnect is worth aggressive investment because the payoff---true large-scale modularity---is transformative.
+\end{enumerate}
+
+\subsection{Recommendations}
+
+\begin{enumerate}
+\item \textbf{Invest aggressively in transduction efficiency} as the highest-leverage single metric. Target 10\% efficiency by 2028.
+\item \textbf{Develop cryogenic photonic packaging} as a parallel engineering track. This is on the critical path for any multi-link deployment regardless of transduction technology.
+\item \textbf{Maintain dual-track transduction R\&D} (electro-optic and piezo-optomechanical) until Gate P-1 data enables informed down-select.
+\item \textbf{Co-design the QEC protocol with realistic interconnect models} from the outset. Do not assume ideal inter-module links in QEC simulations.
+\item \textbf{Establish quantitative validation gates} (Section~7) and enforce them. Do not promote photonic interconnects to architectural commitment without gate passage.
+\end{enumerate}
+
+\textbf{[Claim: recommendations $|$ Status: QONTOS-research-position]} These recommendations reflect the QONTOS research team's assessment of the optimal path given current literature and projected technology trajectories.
+
+\section{Conclusion}
+
+Photonic interconnects represent the most promising path to large-scale modular quantum computing with superconducting qubits, but they remain in the research-to-engineering transition phase. The end-to-end Bell-pair budget analysis presented in this paper demonstrates that the stretch architecture (100+ modules, $10^6$ qubits) requires transduction efficiencies of 20\% or higher---roughly two orders of magnitude above current best demonstrations---combined with $>$90\% coupling efficiency, $>$90\% detector efficiency, and sub-microsecond heralding latency. No single component is the sole bottleneck; the challenge is systems integration across cryogenic, photonic, microwave, and classical control domains.
+
+The QONTOS approach is to pursue photonic interconnects as a high-priority R\&D track with explicit, quantitative validation gates, while maintaining fallback architectures that preserve modular scaling at reduced capability. The modular thesis does not depend exclusively on photonic links---direct microwave links and classical photonic readout provide viable interim paths---but the full stretch architecture is achievable only with photonic entanglement distribution at the aggressive or stretch performance level.
+
+\textbf{[Claim: conclusion $|$ Status: summary-of-analysis]} This paper does not claim that the stretch photonic interconnect targets will be achieved. It claims that they are physically plausible, worth pursuing, and that the QONTOS architecture has defined fallback positions if they are not achieved on the projected timeline.
+
+\begin{thebibliography}{9}
+
+\bibitem{Monroe2014}
+C.~Monroe, R.~Raussendorf, A.~Ruthven, K.~R.~Brown, P.~Maunz, L.-M.~Duan, and J.~Kim, ``Large-scale modular quantum-computer architecture with atomic memory and photonic interconnects,'' \emph{Physical Review A}, vol.~89, no.~2, p.~022317, 2014.
+
+\bibitem{Lauk2020}
+N.~Lauk, N.~Sinclair, S.~Barzanjeh, J.~P.~Covey, M.~Saffman, M.~Spiropulu, and C.~Simon, ``Perspectives on quantum transduction,'' \emph{Quantum Science and Technology}, vol.~5, p.~020501, 2020.
+
+\bibitem{Awschalom2021}
+D.~D.~Awschalom \emph{et~al.}, ``Development of quantum interconnects (QuICs) for next-generation information technologies,'' \emph{PRX Quantum}, vol.~2, p.~017002, 2021.
+
+\bibitem{Zhong2019}
+Y.~P.~Zhong \emph{et~al.}, ``Violating Bell's inequality with remotely connected superconducting qubits,'' \emph{Nature Physics}, vol.~15, pp.~741--744, 2019.
+
+\bibitem{Magnard2020}
+P.~Magnard \emph{et~al.}, ``Microwave quantum link between superconducting circuits housed in spatially separated cryogenic systems,'' \emph{Physical Review Letters}, vol.~125, p.~260502, 2020.
+
+\bibitem{Kurpiers2018}
+P.~Kurpiers \emph{et~al.}, ``Deterministic quantum state transfer and remote entanglement using microwave photons,'' \emph{Nature}, vol.~558, pp.~264--267, 2018.
+
+\bibitem{Lecocq2021}
+F.~Lecocq, F.~Quinlan, K.~Cicak, J.~Aumentado, S.~A.~Diddams, and J.~D.~Teufel, ``Control and readout of a superconducting qubit using a photonic link,'' \emph{Nature}, vol.~591, pp.~575--579, 2021.
+
+\bibitem{Delaney2022}
+R.~D.~Delaney \emph{et~al.}, ``Superconducting-qubit readout via low-backaction electro-optic transduction,'' \emph{Nature}, vol.~606, pp.~489--493, 2022.
+
+\bibitem{Mirhosseini2020}
+M.~Mirhosseini, A.~Sipahigil, M.~Kalaee, and O.~Painter, ``Superconducting qubit to optical photon transduction,'' \emph{Nature}, vol.~588, pp.~599--603, 2020.
+
+\end{thebibliography}
+
+\end{document}
