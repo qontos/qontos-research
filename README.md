@@ -21,6 +21,7 @@
     <a href="#overview">Overview</a> &middot;
     <a href="#research-surface">Research Surface</a> &middot;
     <a href="#document-index">Document Index</a> &middot;
+    <a href="docs/index.md">Docs Hub</a> &middot;
     <a href="#canonical-architecture">Canonical Architecture</a> &middot;
     <a href="#citation">Citation</a>
   </p>
@@ -31,6 +32,8 @@
 ## Overview
 
 QONTOS Research is the public technical publication layer for the broader QONTOS platform. It collects the whitepaper, paper series, roadmap, and figures that explain how the software stack, modular hardware program, and long-range scaling assumptions fit together.
+
+Start with [docs/index.md](docs/index.md) for the research docs hub and links into the wider public QONTOS ecosystem.
 
 - **Open today**: SDK, simulators, examples, benchmarks, and public technical documentation
 - **In development**: native modular superconducting hardware with photonic interconnects

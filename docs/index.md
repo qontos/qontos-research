@@ -2,6 +2,8 @@
 
 Welcome to the QONTOS research documentation. This page serves as the landing page for all public research materials produced by the QONTOS quantum computing program.
 
+Use the [Public Registry](https://github.com/qontos/.github/blob/main/docs/public-registry.md) for the shared map across the public SDK, simulator, examples, benchmark, and research repos.
+
 ## Research Materials
 
 ### Technical Whitepaper
@@ -39,7 +41,7 @@ Architecture diagrams, system charts, and publication-ready figures are availabl
 ## QONTOS Ecosystem
 
 | Repository | Description |
-|------------|-------------|
+| :--- | :--- |
 | [qontos](https://github.com/qontos/qontos) | Flagship Python SDK for quantum circuit orchestration |
 | [qontos-sim](https://github.com/qontos/qontos-sim) | Simulators, digital twin, and tensor-network engine |
 | [qontos-benchmarks](https://github.com/qontos/qontos-benchmarks) | Benchmark framework and reproducible evidence |
