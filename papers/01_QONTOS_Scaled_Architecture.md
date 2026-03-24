@@ -272,7 +272,7 @@ The most credible near-term message is:
 
 ## References
 
-[1] S. Bland et al., "Two-millisecond coherence in superconducting transmon qubits via tantalum-on-silicon platform," Nature, Nov. 2025.
+[1] S. Bland et al., "Millisecond lifetimes and coherence times in 2D transmon qubits," Nature, vol. 647, pp. 343-348, Nov. 2025.
 
 [2] Google Quantum AI, "Suppressing quantum errors by scaling a surface code logical qubit," Nature, 2023.
 
