@@ -39,7 +39,7 @@ QONTOS Research is the public technical publication layer for the broader QONTOS
 ## Research Surface
 
 | Area | Focus |
-| --- | --- |
+| :--- | :--- |
 | `whitepaper/` | Technical whitepaper for the QONTOS software stack and full-stack program |
 | `papers/` | 10-paper research series covering architecture, devices, FTQC, interconnects, algorithms, and benchmarking |
 | `roadmap/` | Gated multi-phase development path from platform maturity to large-scale modular hardware |
@@ -58,7 +58,7 @@ The [QONTOS Technical Whitepaper](whitepaper/QONTOS_Technical_Whitepaper.md) doc
 ### Research Paper Series
 
 | # | Paper | Topic | Status |
-| --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- |
 | 01 | [Scaled Architecture](papers/01_QONTOS_Scaled_Architecture_v2.md) | Chiplet-module-system-data-center hierarchy | Research |
 | 02 | [Tantalum-Silicon Qubits](papers/02_Tantalum_Silicon_Qubits_v2.md) | Qubit platform and device physics | Research |
 | 03 | [Error Correction at 100:1](papers/03_Error_Correction_100to1_v2.md) | QEC overhead reduction path | Research |
@@ -75,7 +75,7 @@ The [QONTOS Technical Whitepaper](whitepaper/QONTOS_Technical_Whitepaper.md) doc
 The [5-phase roadmap](roadmap/ROADMAP_2030.md) outlines base, aggressive, and stretch development paths.
 
 | Phase | Timeline | Base | Aggressive | Stretch |
-| --- | --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- | :--- |
 | Foundation | 2025-2026 | Platform + benchmarks | First hardware validation | Stretch device evidence |
 | Sputnik | 2026-2027 | Small modular hardware | 10k-qubit module | Stretch module target |
 | Pioneer | 2027-2028 | Distributed runtime | Multi-module demos | 100k physical qubit path |
@@ -85,7 +85,7 @@ The [5-phase roadmap](roadmap/ROADMAP_2030.md) outlines base, aggressive, and st
 ## Canonical Architecture
 
 | Tier | Unit | Physical Qubits | Logical Qubits (100:1 stretch) |
-| --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- |
 | Chiplet | 1 | 2,000 | 20 |
 | Module | 5 chiplets | 10,000 | 100 |
 | System | 10 modules | 100,000 | 1,000 |
@@ -106,7 +106,7 @@ The [5-phase roadmap](roadmap/ROADMAP_2030.md) outlines base, aggressive, and st
 ## Related Repositories
 
 | Repository | Role |
-| --- | --- |
+| :--- | :--- |
 | [qontos](https://github.com/qontos/qontos) | Flagship SDK and public developer entry point |
 | [qontos-sim](https://github.com/qontos/qontos-sim) | Simulators, digital twin, and tensor-network modeling |
 | [qontos-examples](https://github.com/qontos/qontos-examples) | Tutorials, notebooks, and runnable workflows |
